@@ -6,6 +6,7 @@ import './home.css';
 
 function Home() {
     const [filmes, setFilmes] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
 
@@ -19,28 +20,37 @@ function Home() {
             })
 
             //guardando o json no useState
-            setFilmes(response.data.results.slice(0,10));
+            setFilmes(response.data.results.slice(0, 10));
+            setLoading(false);
         }
 
         loadFilmes();
 
     }, [])
 
-    return (
-        <div className="container">
-            <div className="lista-filmes">
-                {filmes.map((filme) => {
-                    return(
-                        <article ket={filme.id}>
-                            <strong>{filme.title}</strong>
-                            <img src={`https://image.tmdb.org/t/p/original/${filme.poster_path}`} alt={filme.title}/>
-                            <Link to={`/filme/${filme.id}`}>Acessar</Link>
-                        </article>
-                    )
-                })}
+    if (loading){
+        return(
+            <div className="loading">
+                <h2>Carregando filmes...</h2>
             </div>
-        </div>
-    );
+        )
+    }
+
+        return (
+            <div className="container">
+                <div className="lista-filmes">
+                    {filmes.map((filme) => {
+                        return (
+                            <article ket={filme.id}>
+                                <strong>{filme.title}</strong>
+                                <img src={`https://image.tmdb.org/t/p/original/${filme.poster_path}`} alt={filme.title} />
+                                <Link to={`/filme/${filme.id}`}>Acessar</Link>
+                            </article>
+                        )
+                    })}
+                </div>
+            </div>
+        );
 }
 
 export default Home;
